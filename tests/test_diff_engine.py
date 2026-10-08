@@ -11,8 +11,30 @@ class DiffEngineTests(unittest.TestCase):
         self.assertIn("First sync", md)
 
     def test_server_status_change(self) -> None:
-        prev = {"resources": {"servers": [{"id": 1, "name": "a", "status": "running", "public_net": {"ipv4": "1.1.1.1"}}]}}
-        cur = {"resources": {"servers": [{"id": 1, "name": "a", "status": "off", "public_net": {"ipv4": "1.1.1.1"}}]}}
+        prev = {
+            "resources": {
+                "servers": [
+                    {
+                        "id": 1,
+                        "name": "a",
+                        "status": "running",
+                        "public_net": {"ipv4": "1.1.1.1"},
+                    }
+                ]
+            }
+        }
+        cur = {
+            "resources": {
+                "servers": [
+                    {
+                        "id": 1,
+                        "name": "a",
+                        "status": "off",
+                        "public_net": {"ipv4": "1.1.1.1"},
+                    }
+                ]
+            }
+        }
         md = render_diff_markdown(prev, cur)
         self.assertIn("Servers", md)
         self.assertIn("status", md)

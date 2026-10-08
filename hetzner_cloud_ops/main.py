@@ -5,4 +5,3 @@ from .command_router import CommandRouter
 
 def main(argv: list[str]) -> int:
     return CommandRouter().run(argv)
-

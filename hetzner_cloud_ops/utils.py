@@ -48,13 +48,15 @@ def ensure_dir(path: Path) -> None:
 
 def atomic_write_text(path: Path, text: str) -> None:
     import tempfile
+
     fd, name = tempfile.mkstemp(prefix=".snapshot-", dir=path.parent)
     try:
-        with os.fdopen(fd, 'w', encoding='utf-8') as f:
+        with os.fdopen(fd, "w", encoding="utf-8") as f:
             f.write(text)
         os.replace(name, path)
     finally:
-        if os.path.exists(name): os.unlink(name)
+        if os.path.exists(name):
+            os.unlink(name)
 
 
 def stable_json_dumps(obj: Any) -> str:
@@ -78,7 +80,9 @@ def _truncate(s: str, max_len: int) -> str:
     return s[: max(0, max_len - 1)] + "…"
 
 
-def format_table(headers: list[str], rows: list[list[str]], *, max_col_width: int = 48) -> str:
+def format_table(
+    headers: list[str], rows: list[list[str]], *, max_col_width: int = 48
+) -> str:
     widths = [len(h) for h in headers]
     for row in rows:
         for i, cell in enumerate(row):
@@ -97,4 +101,3 @@ def format_table(headers: list[str], rows: list[list[str]], *, max_col_width: in
     for row in rows:
         out.append(fmt_row(row))
     return "\n".join(out)
-

@@ -56,7 +56,9 @@ class StateStore:
 
     def rotate_prev(self) -> None:
         if self._paths.state.exists():
-            atomic_write_text(self._paths.prev, self._paths.state.read_text(encoding="utf-8"))
+            atomic_write_text(
+                self._paths.prev, self._paths.state.read_text(encoding="utf-8")
+            )
 
     def write_last_diff(self, markdown: str) -> None:
         atomic_write_text(self._paths.last_diff, markdown.rstrip() + "\n")

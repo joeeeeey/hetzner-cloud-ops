@@ -21,8 +21,15 @@ class NoRedirect(urllib.request.HTTPRedirectHandler):
     def redirect_request(self, req, fp, code, msg, headers, newurl):
         return None
 
+
 class HetznerAPIClient:
-    def __init__(self, token: str, *, base_url: str = "https://api.hetzner.cloud/v1", timeout_s: int = 30):
+    def __init__(
+        self,
+        token: str,
+        *,
+        base_url: str = "https://api.hetzner.cloud/v1",
+        timeout_s: int = 30,
+    ):
         self._token = token
         self._base_url = base_url.rstrip("/")
         self._timeout_s = timeout_s
@@ -49,10 +56,14 @@ class HetznerAPIClient:
             data_bytes = json.dumps(json_body).encode("utf-8")
             headers["Content-Type"] = "application/json"
 
-        req = urllib.request.Request(url, method=method, headers=headers, data=data_bytes)
+        req = urllib.request.Request(
+            url, method=method, headers=headers, data=data_bytes
+        )
 
         try:
-            with urllib.request.build_opener(NoRedirect()).open(req, timeout=self._timeout_s) as resp:
+            with urllib.request.build_opener(NoRedirect()).open(
+                req, timeout=self._timeout_s
+            ) as resp:
                 status = int(getattr(resp, "status", 200))
                 body = resp.read()
         except urllib.error.HTTPError as e:
@@ -66,14 +77,18 @@ class HetznerAPIClient:
         except urllib.error.URLError as e:
             reason = getattr(e, "reason", e)
             hint = "Network, DNS, or proxy issue: try `--no-sync` with cached state first, then inspect network, VPN, and proxy configuration."
-            raise BackendError(f"Hetzner API network error: {reason}", hint=hint) from None
+            raise BackendError(
+                f"Hetzner API network error: {reason}", hint=hint
+            ) from None
         except socket.timeout:
             hint = "Request timed out: inspect the network or retry later. You can also use `--no-sync` with cached state."
             raise BackendError("Hetzner API request timed out", hint=hint) from None
 
         if status not in set(ok_status):
             msg = "response body suppressed"
-            raise BackendError(f"Hetzner API returned unexpected status {status}: {msg}")
+            raise BackendError(
+                f"Hetzner API returned unexpected status {status}: {msg}"
+            )
 
         if not body:
             return APIResponse(data={}, status=status)
@@ -90,9 +105,13 @@ class HetznerAPIClient:
         seen = set()
         while True:
             if page in seen or len(seen) >= 100:
-                raise BackendError("Pagination repeated or exceeded 100 pages; narrow the inventory")
+                raise BackendError(
+                    "Pagination repeated or exceeded 100 pages; narrow the inventory"
+                )
             seen.add(page)
-            resp = self._request("GET", path, params={"page": str(page), "per_page": str(per_page)})
+            resp = self._request(
+                "GET", path, params={"page": str(page), "per_page": str(per_page)}
+            )
             items = resp.data.get(key) or []
             if not isinstance(items, list):
                 raise BackendError(f"Hetzner API response field {key} is not a list")
@@ -130,11 +149,19 @@ class HetznerAPIClient:
         resp = self._request("GET", f"/servers/{server_id}")
         server = resp.data.get("server")
         if not isinstance(server, dict):
-            raise BackendError("Hetzner API /servers/{id} response is missing the server field")
+            raise BackendError(
+                "Hetzner API /servers/{id} response is missing the server field"
+            )
         return server
 
-    def list_server_actions(self, server_id: int, *, per_page: int = 25) -> list[dict[str, Any]]:
-        resp = self._request("GET", f"/servers/{server_id}/actions", params={"page": "1", "per_page": str(per_page)})
+    def list_server_actions(
+        self, server_id: int, *, per_page: int = 25
+    ) -> list[dict[str, Any]]:
+        resp = self._request(
+            "GET",
+            f"/servers/{server_id}/actions",
+            params={"page": "1", "per_page": str(per_page)},
+        )
         actions = resp.data.get("actions") or []
         if not isinstance(actions, list):
             raise BackendError("Hetzner API actions field is not a list")
@@ -169,15 +196,24 @@ class HetznerAPIClient:
     def server_power_action(self, server_id: int, action: str) -> dict[str, Any]:
         if action not in {"poweron", "poweroff", "reboot"}:
             raise BackendError(f"Unsupported power action: {action}")
-        resp = self._request("POST", f"/servers/{server_id}/actions/{action}", ok_status=(201,))
+        resp = self._request(
+            "POST", f"/servers/{server_id}/actions/{action}", ok_status=(201,)
+        )
         return resp.data
 
     def delete_server(self, server_id: int) -> None:
         self._request("DELETE", f"/servers/{server_id}", ok_status=(200, 204))
 
-    def firewall_apply_to_server(self, firewall_id: int, server_id: int) -> dict[str, Any]:
+    def firewall_apply_to_server(
+        self, firewall_id: int, server_id: int
+    ) -> dict[str, Any]:
         body = {"apply_to": [{"type": "server", "server": {"id": server_id}}]}
-        resp = self._request("POST", f"/firewalls/{firewall_id}/actions/apply_to_resources", json_body=body, ok_status=(201,))
+        resp = self._request(
+            "POST",
+            f"/firewalls/{firewall_id}/actions/apply_to_resources",
+            json_body=body,
+            ok_status=(201,),
+        )
         return resp.data
 
 

@@ -6,7 +6,17 @@ from .utils import format_kv_labels, format_table
 
 
 def render_servers_list(servers: list[dict[str, Any]]) -> str:
-    headers = ["NAME", "ID", "STATUS", "LOC", "TYPE", "IPV4", "IPV6", "CREATED", "LABELS"]
+    headers = [
+        "NAME",
+        "ID",
+        "STATUS",
+        "LOC",
+        "TYPE",
+        "IPV4",
+        "IPV6",
+        "CREATED",
+        "LABELS",
+    ]
     rows: list[list[str]] = []
     for s in servers:
         public = s.get("public_net") if isinstance(s.get("public_net"), dict) else {}
@@ -20,7 +30,9 @@ def render_servers_list(servers: list[dict[str, Any]]) -> str:
                 str(public.get("ipv4") or "-"),
                 str(public.get("ipv6") or "-"),
                 str(s.get("created") or "-"),
-                format_kv_labels(s.get("labels") if isinstance(s.get("labels"), dict) else {}),
+                format_kv_labels(
+                    s.get("labels") if isinstance(s.get("labels"), dict) else {}
+                ),
             ]
         )
     table = format_table(headers, rows)
@@ -39,9 +51,10 @@ def render_firewalls_list(firewalls: list[dict[str, Any]]) -> str:
                 str(len(fw.get("rules") or [])),
                 str(len(applied)),
                 str(fw.get("created") or "-"),
-                format_kv_labels(fw.get("labels") if isinstance(fw.get("labels"), dict) else {}),
+                format_kv_labels(
+                    fw.get("labels") if isinstance(fw.get("labels"), dict) else {}
+                ),
             ]
         )
     table = format_table(headers, rows)
     return "```text\n" + table + "\n```"
-

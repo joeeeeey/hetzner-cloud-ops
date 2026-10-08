@@ -39,7 +39,9 @@ def _labels_diff(prev: dict[str, str] | None, cur: dict[str, str] | None) -> lis
     return changes
 
 
-def diff_servers(prev: list[dict[str, Any]], cur: list[dict[str, Any]]) -> dict[str, Any]:
+def diff_servers(
+    prev: list[dict[str, Any]], cur: list[dict[str, Any]]
+) -> dict[str, Any]:
     p = _by_id(prev)
     c = _by_id(cur)
     added = [c[i] for i in sorted(set(c.keys()) - set(p.keys()))]
@@ -59,13 +61,29 @@ def diff_servers(prev: list[dict[str, Any]], cur: list[dict[str, Any]]) -> dict[
         ch("location")
         ch("server_type", "type")
 
-        ipv4_a = ((a.get("public_net") or {}).get("ipv4") if isinstance(a.get("public_net"), dict) else None) or ""
-        ipv4_b = ((b.get("public_net") or {}).get("ipv4") if isinstance(b.get("public_net"), dict) else None) or ""
+        ipv4_a = (
+            (a.get("public_net") or {}).get("ipv4")
+            if isinstance(a.get("public_net"), dict)
+            else None
+        ) or ""
+        ipv4_b = (
+            (b.get("public_net") or {}).get("ipv4")
+            if isinstance(b.get("public_net"), dict)
+            else None
+        ) or ""
         if ipv4_a != ipv4_b:
             changes.append(f"ipv4: {ipv4_a or '-'} -> {ipv4_b or '-'}")
 
-        ipv6_a = ((a.get("public_net") or {}).get("ipv6") if isinstance(a.get("public_net"), dict) else None) or ""
-        ipv6_b = ((b.get("public_net") or {}).get("ipv6") if isinstance(b.get("public_net"), dict) else None) or ""
+        ipv6_a = (
+            (a.get("public_net") or {}).get("ipv6")
+            if isinstance(a.get("public_net"), dict)
+            else None
+        ) or ""
+        ipv6_b = (
+            (b.get("public_net") or {}).get("ipv6")
+            if isinstance(b.get("public_net"), dict)
+            else None
+        ) or ""
         if ipv6_a != ipv6_b:
             changes.append(f"ipv6: {ipv6_a or '-'} -> {ipv6_b or '-'}")
 
@@ -76,20 +94,32 @@ def diff_servers(prev: list[dict[str, Any]], cur: list[dict[str, Any]]) -> dict[
         vols_a = _set_str(a.get("volumes"))
         vols_b = _set_str(b.get("volumes"))
         if vols_a != vols_b:
-            changes.append(f"volumes: {sorted(vols_a) or '-'} -> {sorted(vols_b) or '-'}")
+            changes.append(
+                f"volumes: {sorted(vols_a) or '-'} -> {sorted(vols_b) or '-'}"
+            )
 
         fws_a = _set_str(a.get("firewalls"))
         fws_b = _set_str(b.get("firewalls"))
         if fws_a != fws_b:
-            changes.append(f"firewalls: {sorted(fws_a) or '-'} -> {sorted(fws_b) or '-'}")
+            changes.append(
+                f"firewalls: {sorted(fws_a) or '-'} -> {sorted(fws_b) or '-'}"
+            )
 
         if changes:
-            changed.append({"id": sid, "name": b.get("name") or a.get("name") or "", "changes": changes})
+            changed.append(
+                {
+                    "id": sid,
+                    "name": b.get("name") or a.get("name") or "",
+                    "changes": changes,
+                }
+            )
 
     return {"added": added, "removed": removed, "changed": changed}
 
 
-def diff_generic(prev: list[dict[str, Any]], cur: list[dict[str, Any]], *, fields: list[str]) -> dict[str, Any]:
+def diff_generic(
+    prev: list[dict[str, Any]], cur: list[dict[str, Any]], *, fields: list[str]
+) -> dict[str, Any]:
     p = _by_id(prev)
     c = _by_id(cur)
     added = [c[i] for i in sorted(set(c.keys()) - set(p.keys()))]
@@ -106,13 +136,27 @@ def diff_generic(prev: list[dict[str, Any]], cur: list[dict[str, Any]], *, field
         if labels_changes:
             changes.append("labels: " + "; ".join(labels_changes))
         if changes:
-            changed.append({"id": rid, "name": b.get("name") or a.get("name") or "", "changes": changes})
+            changed.append(
+                {
+                    "id": rid,
+                    "name": b.get("name") or a.get("name") or "",
+                    "changes": changes,
+                }
+            )
     return {"added": added, "removed": removed, "changed": changed}
 
 
 def render_diff_markdown(prev_state: dict[str, Any], cur_state: dict[str, Any]) -> str:
-    prev_res = (prev_state.get("resources") or {}) if isinstance(prev_state.get("resources"), dict) else {}
-    cur_res = (cur_state.get("resources") or {}) if isinstance(cur_state.get("resources"), dict) else {}
+    prev_res = (
+        (prev_state.get("resources") or {})
+        if isinstance(prev_state.get("resources"), dict)
+        else {}
+    )
+    cur_res = (
+        (cur_state.get("resources") or {})
+        if isinstance(cur_state.get("resources"), dict)
+        else {}
+    )
 
     if not prev_res:
         return "\n".join(
@@ -125,11 +169,29 @@ def render_diff_markdown(prev_state: dict[str, Any], cur_state: dict[str, Any]) 
         )
 
     servers = diff_servers(prev_res.get("servers") or [], cur_res.get("servers") or [])
-    volumes = diff_generic(prev_res.get("volumes") or [], cur_res.get("volumes") or [], fields=["size_gb", "status", "server", "location"])
-    networks = diff_generic(prev_res.get("networks") or [], cur_res.get("networks") or [], fields=["ip_range"])
-    firewalls = diff_generic(prev_res.get("firewalls") or [], cur_res.get("firewalls") or [], fields=[])
-    fips = diff_generic(prev_res.get("floating_ips") or [], cur_res.get("floating_ips") or [], fields=["ip", "server", "home_location"])
-    lbs = diff_generic(prev_res.get("load_balancers") or [], cur_res.get("load_balancers") or [], fields=["type", "location"])
+    volumes = diff_generic(
+        prev_res.get("volumes") or [],
+        cur_res.get("volumes") or [],
+        fields=["size_gb", "status", "server", "location"],
+    )
+    networks = diff_generic(
+        prev_res.get("networks") or [],
+        cur_res.get("networks") or [],
+        fields=["ip_range"],
+    )
+    firewalls = diff_generic(
+        prev_res.get("firewalls") or [], cur_res.get("firewalls") or [], fields=[]
+    )
+    fips = diff_generic(
+        prev_res.get("floating_ips") or [],
+        cur_res.get("floating_ips") or [],
+        fields=["ip", "server", "home_location"],
+    )
+    lbs = diff_generic(
+        prev_res.get("load_balancers") or [],
+        cur_res.get("load_balancers") or [],
+        fields=["type", "location"],
+    )
 
     def section(title: str, d: dict[str, Any]) -> list[str]:
         lines: list[str] = []

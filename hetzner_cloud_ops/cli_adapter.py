@@ -23,7 +23,9 @@ def detect_hcloud() -> HcloudInfo:
         return HcloudInfo(available=False)
     version = None
     try:
-        proc = subprocess.run([path, "version"], capture_output=True, text=True, check=False, timeout=60)
+        proc = subprocess.run(
+            [path, "version"], capture_output=True, text=True, check=False, timeout=60
+        )
         if proc.returncode == 0:
             version = (proc.stdout or proc.stderr).strip().splitlines()[0][:120]
     except Exception:
@@ -42,31 +44,41 @@ class HcloudCLIAdapter:
         # Never pass the token through command-line arguments; use env only.
         cmd = [self._hcloud, *args, "-o", "json"]
         try:
-            proc = subprocess.run(cmd, env=env, capture_output=True, text=True, check=False, timeout=60)
+            proc = subprocess.run(
+                cmd, env=env, capture_output=True, text=True, check=False, timeout=60
+            )
         except (OSError, subprocess.TimeoutExpired):
-            raise BackendError("hcloud failed or timed out; inspect target before retrying") from None
+            raise BackendError(
+                "hcloud failed or timed out; inspect target before retrying"
+            ) from None
         if proc.returncode != 0:
             stderr = (proc.stderr or proc.stdout or "").strip()
             hint = None
             if "HCLOUD_TOKEN" in stderr or "token" in stderr.lower():
                 hint = "hcloud authentication failed: check whether HETZNER_ADMIN_TOKEN is correct, or verify that an hcloud context is not overriding it."
-            raise BackendError('hcloud command failed; output suppressed', hint=hint)
+            raise BackendError("hcloud command failed; output suppressed", hint=hint)
         try:
             return json.loads(proc.stdout)
         except json.JSONDecodeError as e:
-            raise BackendError(f"hcloud output is not valid JSON: {' '.join(args)} ({e})") from None
+            raise BackendError(
+                f"hcloud output is not valid JSON: {' '.join(args)} ({e})"
+            ) from None
 
     def _run_no_output(self, args: list[str]) -> None:
         env = os.environ.copy()
         env["HCLOUD_TOKEN"] = self._token
         cmd = [self._hcloud, *args]
         try:
-            proc = subprocess.run(cmd, env=env, capture_output=True, text=True, check=False, timeout=60)
+            proc = subprocess.run(
+                cmd, env=env, capture_output=True, text=True, check=False, timeout=60
+            )
         except (OSError, subprocess.TimeoutExpired):
-            raise BackendError("hcloud failed or timed out; inspect target before retrying") from None
+            raise BackendError(
+                "hcloud failed or timed out; inspect target before retrying"
+            ) from None
         if proc.returncode != 0:
             stderr = (proc.stderr or proc.stdout or "").strip()
-            raise BackendError('hcloud command failed; output suppressed')
+            raise BackendError("hcloud command failed; output suppressed")
 
     # ---- list resources ----
     def list_servers(self) -> list[dict[str, Any]]:
@@ -129,7 +141,9 @@ class HcloudCLIAdapter:
         return data if isinstance(data, dict) else {"raw": data}
 
     def server_power_action(self, ident: str, action: str) -> None:
-        cmd = {"poweron": "poweron", "poweroff": "poweroff", "reboot": "reboot"}.get(action)
+        cmd = {"poweron": "poweron", "poweroff": "poweroff", "reboot": "reboot"}.get(
+            action
+        )
         if not cmd:
             raise BackendError(f"Unsupported power action: {action}")
         self._run_no_output(["server", cmd, ident])
@@ -156,7 +170,14 @@ class HcloudCLIAdapter:
         env["HCLOUD_TOKEN"] = self._token
         cmd = [self._hcloud, "--quiet", "server", "delete", ident]
         try:
-            proc = subprocess.run(cmd, env=env, capture_output=True, text=True, check=False, timeout=timeout_s)
+            proc = subprocess.run(
+                cmd,
+                env=env,
+                capture_output=True,
+                text=True,
+                check=False,
+                timeout=timeout_s,
+            )
         except subprocess.TimeoutExpired:
             raise BackendError(
                 "hcloud delete timed out (it may be waiting for interactive confirmation)",

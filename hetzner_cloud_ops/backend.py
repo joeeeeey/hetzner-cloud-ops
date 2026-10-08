@@ -20,7 +20,11 @@ class HybridBackend:
         self._prefer = prefer
         self._hcloud_info = detect_hcloud()
         self._api = HetznerAPIClient(token)
-        self._cli = HcloudCLIAdapter(token, hcloud_path=self._hcloud_info.path) if self._hcloud_info.available else None
+        self._cli = (
+            HcloudCLIAdapter(token, hcloud_path=self._hcloud_info.path)
+            if self._hcloud_info.available
+            else None
+        )
 
     @property
     def meta(self) -> BackendMeta:
@@ -110,17 +114,27 @@ class HybridBackend:
     ) -> dict[str, Any]:
         if self._want_cli() and self._cli and user_data is None:
             # Never replay a mutation through another backend after an ambiguous error.
-            return self._cli.create_server(name=name, image=image, server_type=server_type,
-                location=location, ssh_keys=ssh_keys, user_data_from_file=user_data_from_file)
+            return self._cli.create_server(
+                name=name,
+                image=image,
+                server_type=server_type,
+                location=location,
+                ssh_keys=ssh_keys,
+                user_data_from_file=user_data_from_file,
+            )
 
         api_user_data = user_data
         if api_user_data is None and user_data_from_file:
             try:
                 from pathlib import Path
 
-                api_user_data = Path(user_data_from_file).expanduser().read_text(encoding="utf-8")
+                api_user_data = (
+                    Path(user_data_from_file).expanduser().read_text(encoding="utf-8")
+                )
             except Exception as e:
-                raise BackendError(f"Failed to read user_data file: {user_data_from_file} ({e})") from None
+                raise BackendError(
+                    f"Failed to read user_data file: {user_data_from_file} ({e})"
+                ) from None
 
         return self._api.create_server(
             name=name,
@@ -143,7 +157,14 @@ class HybridBackend:
             return
         self._api.delete_server(server_id)
 
-    def firewall_apply_to_server(self, firewall_ident: str, *, firewall_id: int, server_ident: str, server_id: int) -> None:
+    def firewall_apply_to_server(
+        self,
+        firewall_ident: str,
+        *,
+        firewall_id: int,
+        server_ident: str,
+        server_id: int,
+    ) -> None:
         if self._want_cli() and self._cli:
             self._cli.firewall_apply_to_server(firewall_ident, server_ident)
             return
