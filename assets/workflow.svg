@@ -1,11 +1,124 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="944" height="342" viewBox="0 0 944 342" role="img" aria-labelledby="title desc">
-<title id="title">Hetzner Cloud Ops</title><desc id="desc">See what changed in your cloud. Preview what changes next. Snapshot → Compare drift → Preview action.</desc>
-<style>text{font-family:system-ui,-apple-system,Segoe UI,sans-serif} .pulse{animation:flow 4s ease-in-out infinite} @keyframes flow{0%,100%{opacity:.35;transform:translateX(0)}50%{opacity:1;transform:translateX(540px)}} @media(prefers-reduced-motion:reduce){.pulse{animation:none}}</style>
-<rect width="944" height="342" rx="22" fill="#0b1222"/><path d="M0 1 H944" stroke="#fb7185" stroke-width="3" opacity=".65"/>
-<text x="42" y="46" fill="#fb7185" font-size="12" letter-spacing="3">AGENT SKILL / COMMUNITY EDITION</text>
-<text x="42" y="91" fill="#f8fafc" font-size="34" font-weight="700">Hetzner Cloud Ops</text>
-<text x="42" y="124" fill="#9eb0ca" font-size="16">See what changed in your cloud. Preview what changes next.</text>
-<rect x="42" y="160" width="260" height="108" rx="16" fill="#152038" stroke="#2c3d59"/><text x="64" y="192" fill="#fb7185" font-size="12" letter-spacing="2">01</text><text x="64" y="231" fill="#edf3ff" font-size="21" font-weight="600">Snapshot</text><path d="M 307 214 H 334 m -7 -5 7 5 -7 5" stroke="#fb7185" stroke-width="2" fill="none"/><rect x="342" y="160" width="260" height="108" rx="16" fill="#152038" stroke="#2c3d59"/><text x="364" y="192" fill="#fb7185" font-size="12" letter-spacing="2">02</text><text x="364" y="231" fill="#edf3ff" font-size="21" font-weight="600">Compare drift</text><path d="M 607 214 H 634 m -7 -5 7 5 -7 5" stroke="#fb7185" stroke-width="2" fill="none"/><rect x="642" y="160" width="260" height="108" rx="16" fill="#152038" stroke="#2c3d59"/><text x="664" y="192" fill="#fb7185" font-size="12" letter-spacing="2">03</text><text x="664" y="231" fill="#edf3ff" font-size="21" font-weight="600">Preview action</text>
-<path d="M 62 287 H 882" stroke="#263953" stroke-width="2"/><rect class="pulse" x="64" y="285" width="280" height="4" rx="2" fill="#fb7185"/>
-<text x="42" y="321" fill="#90a3bf" font-size="12">CODEX / CLAUDE CODE / CURSOR</text><text x="901" y="321" text-anchor="end" fill="#90a3bf" font-size="12">PORTABLE CLI · EXPLICIT SCOPE</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="500" viewBox="0 0 1000 500" role="img" aria-labelledby="hz-title hz-desc">
+<title id="hz-title">Hetzner Cloud Ops</title>
+<desc id="hz-desc">Illustration of a cloud topology covering six inventory families: floating IPs, load balancers, firewalls, servers, volumes and networks. A snapshot comparison highlights one changed server and one added volume, and a firewall attachment action is shown as a preview that is pending authorization and not applied.</desc>
+<style>
+.hz-s{font-family:"Avenir Next","Trebuchet MS","Segoe UI","Helvetica Neue",Arial,sans-serif}
+.hz-m{font-family:ui-monospace,"SF Mono",Menlo,Consolas,"Courier New",monospace}
+.hz-flow{stroke-dasharray:7 93;animation:hz-flow 3.6s linear infinite}
+.hz-f2{animation-delay:-1.2s}.hz-f3{animation-delay:-2.4s}
+@keyframes hz-flow{from{stroke-dashoffset:0}to{stroke-dashoffset:-100}}
+.hz-scan{animation:hz-scan 6s ease-in-out infinite}
+@keyframes hz-scan{0%{transform:translateY(0)}50%{transform:translateY(298px)}100%{transform:translateY(0)}}
+.hz-ring{opacity:0;transform-box:fill-box;transform-origin:50% 50%;animation:hz-ring 2.8s ease-out infinite}
+@keyframes hz-ring{0%{transform:scale(1);opacity:.9}100%{transform:scale(1.2,1.34);opacity:0}}
+.hz-led{animation:hz-led 2.8s ease-in-out infinite}
+@keyframes hz-led{0%,100%{opacity:1}50%{opacity:.45}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+<defs>
+<pattern id="hz-grid" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.5" fill="#00C2B8" fill-opacity=".35"/></pattern>
+<pattern id="hz-haz" width="22" height="22" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)"><rect width="22" height="22" fill="#FFC700"/><rect width="11" height="22" fill="#0F1A4D"/></pattern>
+<linearGradient id="hz-band" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#00C2B8" stop-opacity="0"/><stop offset="1" stop-color="#00C2B8" stop-opacity=".45"/></linearGradient>
+</defs>
+<rect width="1000" height="500" fill="#E6F2FF"/>
+
+<!-- header -->
+<text class="hz-s" x="40" y="74" font-size="48" font-weight="800" fill="#0F1A4D" letter-spacing="-1">Hetzner Cloud <tspan fill="#B3123F">Ops</tspan></text>
+<text class="hz-s" x="40" y="108" font-size="19" font-weight="600" fill="#0F1A4D">See what changed in your cloud. Preview what changes next.</text>
+<rect x="664" y="40" width="300" height="30" rx="15" fill="#0F1A4D"/>
+<text class="hz-s" x="814" y="60" font-size="13" font-weight="800" fill="#FFC700" text-anchor="middle" letter-spacing=".4">ILLUSTRATIVE / SYNTHETIC DATA</text>
+
+<!-- topology panel -->
+<rect x="36" y="130" width="584" height="342" rx="22" fill="#fff" stroke="#0F1A4D" stroke-width="3"/>
+<rect x="36" y="130" width="584" height="342" rx="22" fill="url(#hz-grid)"/>
+
+<!-- firewall envelope -->
+<rect x="52" y="238" width="552" height="134" rx="18" fill="#B3123F" fill-opacity=".06" stroke="#B3123F" stroke-width="3" stroke-dasharray="9 7"/>
+<rect x="70" y="226" width="156" height="26" rx="13" fill="#B3123F"/>
+<text class="hz-s" x="148" y="244" font-size="14" font-weight="800" fill="#fff" text-anchor="middle">Firewalls 2 → 2</text>
+<rect x="430" y="226" width="160" height="26" rx="13" fill="#0F1A4D"/>
+<text class="hz-s" x="510" y="244" font-size="14" font-weight="800" fill="#fff" text-anchor="middle">Servers 3 → 3</text>
+
+<!-- spokes (base) -->
+<g fill="none" stroke="#0F1A4D" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+<path d="M210 182 H253"/>
+<path d="M328 206 V262"/><path d="M156 262 H500"/><path d="M156 262 V274"/><path d="M328 262 V274"/><path d="M500 262 V274"/>
+<path d="M156 346 V404"/><path d="M328 346 V404"/><path d="M500 346 V404"/>
+</g>
+<!-- spokes (pulse) -->
+<g fill="none" stroke="#FF4B3E" stroke-width="5" stroke-linecap="round">
+<path class="hz-flow" pathLength="100" d="M210 182 H253"/>
+<path class="hz-flow hz-f2" pathLength="100" d="M328 206 V262 H156 V274"/>
+<path class="hz-flow hz-f3" pathLength="100" d="M328 346 V404"/>
+<path class="hz-flow hz-f2" pathLength="100" d="M156 346 V404"/>
+<path class="hz-flow" pathLength="100" d="M500 346 V404"/>
+</g>
+
+<!-- row A -->
+<rect x="60" y="158" width="150" height="50" rx="14" fill="#FFC700" stroke="#0F1A4D" stroke-width="3"/>
+<text class="hz-s" x="135" y="180" font-size="15" font-weight="800" fill="#0F1A4D" text-anchor="middle">Floating IPs</text>
+<text class="hz-s" x="135" y="198" font-size="14" font-weight="700" fill="#0F1A4D" text-anchor="middle">3 → 3</text>
+<rect x="253" y="158" width="150" height="50" rx="14" fill="#00C2B8" stroke="#0F1A4D" stroke-width="3"/>
+<text class="hz-s" x="328" y="180" font-size="15" font-weight="800" fill="#0F1A4D" text-anchor="middle">Load Balancers</text>
+<text class="hz-s" x="328" y="198" font-size="14" font-weight="700" fill="#0F1A4D" text-anchor="middle">1 → 1</text>
+<!-- legend -->
+<rect x="446" y="156" width="20" height="14" rx="5" fill="none" stroke="#FF4B3E" stroke-width="3"/>
+<text class="hz-s" x="474" y="168" font-size="14" font-weight="700" fill="#0F1A4D">ring = drift</text>
+<rect x="446" y="182" width="20" height="14" rx="5" fill="none" stroke="#B3123F" stroke-width="2.5" stroke-dasharray="4 3"/>
+<text class="hz-s" x="474" y="194" font-size="14" font-weight="700" fill="#0F1A4D">dashed = scope</text>
+
+<!-- servers -->
+<g stroke="#0F1A4D" stroke-width="3">
+<rect x="76" y="274" width="160" height="72" rx="13" fill="#fff"/>
+<rect x="248" y="274" width="160" height="72" rx="13" fill="#FFE3E0"/>
+<rect x="420" y="274" width="160" height="72" rx="13" fill="#fff"/>
+</g>
+<rect class="hz-ring" x="248" y="274" width="160" height="72" rx="13" fill="none" stroke="#FF4B3E" stroke-width="4"/>
+<rect x="244" y="270" width="168" height="80" rx="16" fill="none" stroke="#FF4B3E" stroke-width="3.5"/>
+<circle cx="98" cy="298" r="7" fill="#00C2B8"/><circle class="hz-led" cx="270" cy="298" r="7" fill="#FF4B3E"/><circle cx="442" cy="298" r="7" fill="#00C2B8"/>
+<g class="hz-s" fill="#0F1A4D">
+<text x="114" y="304" font-size="16" font-weight="800">web-1</text><text x="96" y="331" font-size="14">running</text>
+<text x="286" y="304" font-size="16" font-weight="800">web-2</text><text x="268" y="331" font-size="14" font-weight="800" fill="#D1281A">running → off</text>
+<text x="458" y="304" font-size="16" font-weight="800">web-3</text><text x="440" y="331" font-size="14">running</text>
+</g>
+<rect x="364" y="262" width="52" height="24" rx="12" fill="#FF4B3E"/>
+<text class="hz-s" x="390" y="279" font-size="13" font-weight="800" fill="#fff" text-anchor="middle">~ 1</text>
+
+<!-- row C -->
+<rect x="76" y="404" width="160" height="50" rx="14" fill="#FF4B3E" stroke="#0F1A4D" stroke-width="3"/>
+<text class="hz-s" x="156" y="426" font-size="15" font-weight="800" fill="#0F1A4D" text-anchor="middle">Volumes 3 → 4</text>
+<text class="hz-s" x="156" y="444" font-size="14" font-weight="800" fill="#0F1A4D" text-anchor="middle">+1 new</text>
+<rect x="262" y="404" width="328" height="50" rx="25" fill="#B3123F" stroke="#0F1A4D" stroke-width="3"/>
+<text class="hz-s" x="426" y="435" font-size="16" font-weight="800" fill="#fff" text-anchor="middle">Networks 1 → 1</text>
+
+<!-- snapshot scan -->
+<g class="hz-scan">
+<rect x="60" y="134" width="536" height="20" fill="url(#hz-band)"/>
+<rect x="56" y="152" width="544" height="3" rx="1.5" fill="#00C2B8"/>
+</g>
+
+<!-- diff card -->
+<rect x="646" y="130" width="318" height="158" rx="20" fill="#fff" stroke="#0F1A4D" stroke-width="3"/>
+<rect x="646" y="130" width="318" height="38" rx="20" fill="#0F1A4D"/>
+<rect x="646" y="148" width="318" height="20" fill="#0F1A4D"/>
+<text class="hz-s" x="664" y="155" font-size="15" font-weight="800" fill="#fff">Diff</text>
+<rect x="722" y="141" width="96" height="20" rx="10" fill="#FFC700"/><text class="hz-s" x="770" y="156" font-size="13" font-weight="800" fill="#0F1A4D" text-anchor="middle">A: before</text>
+<rect x="826" y="141" width="106" height="20" rx="10" fill="#00C2B8"/><text class="hz-s" x="879" y="156" font-size="13" font-weight="800" fill="#0F1A4D" text-anchor="middle">B: after</text>
+<g class="hz-m" font-size="14" font-weight="700">
+<text x="664" y="196" fill="#D1281A">~ server web-2</text>
+<text x="684" y="218" fill="#0F1A4D">running → off</text>
+<text x="664" y="244" fill="#0A8A7F">+ volume data-4</text>
+<text x="664" y="270" fill="#5A6392">= 4 families unchanged</text>
+</g>
+
+<!-- action preview ticket -->
+<rect x="646" y="304" width="318" height="168" rx="20" fill="#fff" stroke="#0F1A4D" stroke-width="3"/>
+<path d="M649 345 V326 Q649 307 668 307 H942 Q961 307 961 326 V345 Z" fill="url(#hz-haz)"/>
+<rect x="690" y="311" width="230" height="26" rx="13" fill="#0F1A4D"/>
+<text class="hz-s" x="805" y="329" font-size="14" font-weight="800" fill="#FFC700" text-anchor="middle" letter-spacing="1">PREVIEW · NOT APPLIED</text>
+<text class="hz-m" x="664" y="370" font-size="14" font-weight="700" fill="#0F1A4D">attach fw-web → web-2</text>
+<text class="hz-s" x="664" y="394" font-size="14" font-weight="800" fill="#D1281A">Pending your authorization</text>
+<text class="hz-s" x="664" y="416" font-size="14" font-weight="700" fill="#0F1A4D">Delete: exact typed confirmation</text>
+<rect x="664" y="426" width="170" height="34" rx="17" fill="#DCEAF8" stroke="#0F1A4D" stroke-width="2.5" stroke-dasharray="6 4"/>
+<text class="hz-m" x="749" y="448" font-size="14" font-weight="800" fill="#5A6392" text-anchor="middle">--apply: locked</text>
 </svg>

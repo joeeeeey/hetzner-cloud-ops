@@ -21,3 +21,13 @@ Validated 2026-10-08 against the implementation branch, using synthetic data.
 These levels are distinct: installer discovery and offline tests do not establish live
 account or native UI behavior. Provider schema changes and permissions still need validation
 against a user's explicitly selected account.
+
+## Visual refresh and naming
+
+The workflow illustration was rewritten through Claude CLI with Sonnet 5.5, then refined
+with a dedicated palette pass. Each skill now has a different capability-specific
+composition and animation. Chromium snapshots at 0, 1.6, 3.6 and 6.2 seconds, an image
+embedding render, and reduced-motion output were checked. All eight rendered without
+text outside the viewBox; animation frames visibly differ and static content remains
+readable. Provider marks are sourced from official sites and attributed separately in
+assets/BRAND-SOURCES.md; marks are excluded from the MIT license.
