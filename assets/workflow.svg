@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="944" height="342" viewBox="0 0 944 342" role="img" aria-labelledby="title desc">
+<title id="title">Hetzner Cloud Ops</title><desc id="desc">See what changed in your cloud. Preview what changes next. Snapshot → Compare drift → Preview action.</desc>
+<style>text{font-family:system-ui,-apple-system,Segoe UI,sans-serif} .pulse{animation:flow 4s ease-in-out infinite} @keyframes flow{0%,100%{opacity:.35;transform:translateX(0)}50%{opacity:1;transform:translateX(540px)}} @media(prefers-reduced-motion:reduce){.pulse{animation:none}}</style>
+<rect width="944" height="342" rx="22" fill="#0b1222"/><path d="M0 1 H944" stroke="#fb7185" stroke-width="3" opacity=".65"/>
+<text x="42" y="46" fill="#fb7185" font-size="12" letter-spacing="3">AGENT SKILL / COMMUNITY EDITION</text>
+<text x="42" y="91" fill="#f8fafc" font-size="34" font-weight="700">Hetzner Cloud Ops</text>
+<text x="42" y="124" fill="#9eb0ca" font-size="16">See what changed in your cloud. Preview what changes next.</text>
+<rect x="42" y="160" width="260" height="108" rx="16" fill="#152038" stroke="#2c3d59"/><text x="64" y="192" fill="#fb7185" font-size="12" letter-spacing="2">01</text><text x="64" y="231" fill="#edf3ff" font-size="21" font-weight="600">Snapshot</text><path d="M 307 214 H 334 m -7 -5 7 5 -7 5" stroke="#fb7185" stroke-width="2" fill="none"/><rect x="342" y="160" width="260" height="108" rx="16" fill="#152038" stroke="#2c3d59"/><text x="364" y="192" fill="#fb7185" font-size="12" letter-spacing="2">02</text><text x="364" y="231" fill="#edf3ff" font-size="21" font-weight="600">Compare drift</text><path d="M 607 214 H 634 m -7 -5 7 5 -7 5" stroke="#fb7185" stroke-width="2" fill="none"/><rect x="642" y="160" width="260" height="108" rx="16" fill="#152038" stroke="#2c3d59"/><text x="664" y="192" fill="#fb7185" font-size="12" letter-spacing="2">03</text><text x="664" y="231" fill="#edf3ff" font-size="21" font-weight="600">Preview action</text>
+<path d="M 62 287 H 882" stroke="#263953" stroke-width="2"/><rect class="pulse" x="64" y="285" width="280" height="4" rx="2" fill="#fb7185"/>
+<text x="42" y="321" fill="#90a3bf" font-size="12">CODEX / CLAUDE CODE / CURSOR</text><text x="901" y="321" text-anchor="end" fill="#90a3bf" font-size="12">PORTABLE CLI · EXPLICIT SCOPE</text>
+</svg>
