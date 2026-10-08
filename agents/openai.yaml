@@ -1,0 +1,4 @@
+interface:
+  display_name: "Hetzner Cloud Ops"
+  short_description: "See what changed in your cloud. Preview what changes next."
+  default_prompt: "Use $hetzner-cloud-ops to inspect the requested scope and report verified results."

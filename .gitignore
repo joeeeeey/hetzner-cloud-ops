@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+node_modules/
+.env
+.env.*
+!.env.example
+*storage-state*
+*storageState*
+state.json
+state.prev.json
+last_diff.md
+exports/
+credentials/
+.DS_Store
